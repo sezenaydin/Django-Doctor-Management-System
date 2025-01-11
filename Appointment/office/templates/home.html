@@ -1,0 +1,190 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'responsive.css' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Office Management System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #002060; 
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1.1rem;
+            color: #fff;
+            transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #00aaff;
+            transform: scale(1.1);
+        }
+
+        .hero-section {
+            height: 500px;
+            background: url("{% static 'images/background.jpg' %}") no-repeat center center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            background: rgba(90, 93, 98, 0.7); 
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .hero-content p {
+            font-size: 2.0rem;
+        }
+
+        .role-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .role-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .role-card img {
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .footer {
+            background-color: #002060;
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        .footer a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .card-img-top {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Doctor's Office Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to Doctor Office Management</h1>
+            
+        </div>
+    </section>
+
+    {% load static %}  
+
+<!-- Role Cards Section -->
+<div class="container my-5">
+    <div class="row text-center">
+        <div class="col-md-6 mb-4">
+            <a href="/office/doctor-login/" style="text-decoration: none;">
+                <div class="card role-card">
+                    
+                    <div class="card-body">
+                        <h4 class="card-title text-primary">Doctor Login</h4>
+                        
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 mb-4">
+            <a href="/office/secretary-login/" style="text-decoration: none;">
+                <div class="card role-card">
+                    
+                    <div class="card-body">
+                        <h4 class="card-title text-success">Secretary Login</h4>
+                        
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <div class="footer text-center">
+        <p>&copy; 2024 Doctor Office Management. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

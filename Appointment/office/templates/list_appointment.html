@@ -1,0 +1,163 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Appointments</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <style>
+        /* Genel Stil */
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #002060; 
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1.1rem;
+            color: #fff;
+            transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #00aaff;
+            transform: scale(1.1);
+        }
+        .dashboard-header {
+            font-size: 2.5rem;
+            color: #343a40;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .dashboard-description {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+
+        .footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{% url 'office:home' %}">Doctor's Office Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                <!-- Dashboard Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dashboard
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'office:secretary_dashboard' %}">Secretary</a>
+                        <a class="dropdown-item" href="{% url 'office:doctor_dashboard' %}">Doctor</a>
+                    </div>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'office:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-link" style="color: white;">Logout</button>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mt-5">
+        <h1 class="dashboard-header">Appointments</h1>
+        <p class="dashboard-description">View and manage all appointments.</p>
+    
+        <a href="{% url 'office:create_appointment' %}" class="btn btn-primary mb-3">Create New Appointment</a>
+    
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Doctor</th>
+                    <th>Appointment Date</th>
+                    <th>Appointment Time</th>
+                    <th>Service Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient_name }}</td>
+                    <td>{{ appointment.doctor }}</td>
+                    <td>{{ appointment.appointment_date }}</td>
+                    <td>{{ appointment.appointment_time }}</td>
+                    <td>{{ appointment.service_type }}</td>
+                    <td>{{ appointment.status }}</td>
+                    <td>
+                        <a href="{% url 'office:update_appointment' appointment.pk %}" class="btn btn-warning">Edit</a>
+                        <form action="{% url 'office:delete_appointment' appointment.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+
+    <!-- Footer -->
+    <div class="footer text-center">
+        <p>&copy; 2024 Secretary Dashboard. All Rights Reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+
+    <!-- Bootstrap JS (Optional for dynamic components) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

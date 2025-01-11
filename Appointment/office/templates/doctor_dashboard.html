@@ -1,0 +1,357 @@
+{% load static %}  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Genel Stil */
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #002060; 
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1.1rem;
+            color: #fff;
+            transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #00aaff;
+            transform: scale(1.1);
+        }
+
+        .dashboard-header {
+            font-size: 2.5rem;
+            color: #343a40;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .dashboard-description {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            gap: 20px; 
+            margin-top: 40px;
+        }
+        
+        .card {
+            width: calc(33.33% - 20px);
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-header {
+            font-size: 2.5rem;
+            color: #343a40;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .dashboard-description {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .table-container {
+            background-color: #e3f2fd; 
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .table {
+            width: 100%; 
+        }
+        
+        .table thead th {
+            background-color: #0288d1;
+            color: white;
+            text-align: center;
+        }
+        
+        .table tbody td {
+            text-align: center;
+        }
+        
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        
+        .table tbody tr:nth-child(even) {
+            background-color: #bbdefb;
+        }
+        
+
+        .btn {
+            margin-right: 5px;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        form input[type="text"] {
+            max-width: 400px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+          
+        .status-scheduled {
+            background-color: #ffeeba; 
+            color: #856404; 
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px; 
+        }
+
+        
+        .status-completed {
+            background-color: #c3e6cb; 
+            color: #155724; 
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+      
+        .status-canceled {
+            background-color: #f5c6cb;
+            color: #721c24; 
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        
+        
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{% url 'office:home' %}">Doctor's Office Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                <!-- Dashboard Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dashboard
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'office:secretary_dashboard' %}">Secretary</a>
+                        <a class="dropdown-item" href="{% url 'office:doctor_dashboard' %}">Doctor</a>
+                    </div>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'office:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-link" style="color: white;">Logout</button>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container text-center">
+        <h1 class="dashboard-header">Welcome to the Doctor Dashboard</h1>
+        <p class="dashboard-description">Manage your medical records, prescriptions, and more.</p>
+    
+        
+        <div class="card-container">
+            
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'office:list_prescriptions' %}" style="text-decoration: none;">
+                        <h4 class="card-title text-warning">Prescriptions</h4>
+                        <p class="card-text">Add, edit, or delete prescriptions for your patients.</p>
+                    </a>
+                </div>
+            </div>
+        
+            
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'office:secretary_dashboard' %}" style="text-decoration: none;">
+                        <h4 class="card-title text-danger">Secretary Actions</h4>
+                        <p class="card-text">Manage and oversee the secretary’s actions and tasks.</p>
+                    </a>
+                </div>
+            </div>
+        
+            
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'office:add_secretary' %}" style="text-decoration: none;">
+                        <h4 class="card-title text-primary">Add Secretary</h4>
+                        <p class="card-text">Register a new secretary to the system.</p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'office:manage_working_days' %}" style="text-decoration: none;">
+                        <h4 class="card-title text-info">Manage Schedule</h4>
+                        <p class="card-text">Set your availability and manage working days.</p>
+                    </a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'office:list_secretaries' %}" style="text-decoration: none;">
+                        <h4 class="card-title text-success">Manage Secretaries</h4>
+                        <p class="card-text">View, update, or delete registered secretaries.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Appointments Tablosu -->
+            <div class="col-md-6">
+                <div class="table-container">
+                    <h2 class="text-primary">Appointments</h2>
+                    <form method="get" class="mb-3">
+                        <input type="text" name="q" class="form-control" placeholder="Search by patient name..." value="{{ request.GET.q }}">
+                    </form>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr>
+                                <td>{{ appointment.patient_name }}</td>
+                                <td>{{ appointment.appointment_date }}</td>
+                                <td>{{ appointment.appointment_time }}</td>
+                                <td>{{ appointment.service_type }}</td>
+                                <td class="status-{{ appointment.status|lower }}">{{ appointment.status }}</td>
+                                <td>
+                                    <a href="{% url 'office:update_appointment' appointment.pk %}" class="btn btn-warning btn-sm">Update</a>
+                                    <a href="{% url 'office:delete_appointment' appointment.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    
+            <!-- Patients Tablosu -->
+            <div class="col-md-6">
+                <div class="table-container">
+                    <h2 class="text-primary">Patients</h2>
+                    <form method="get" class="mb-3">
+                        <input type="text" name="q" class="form-control" placeholder="Search by patient name..." value="{{ request.GET.q }}">
+                    </form>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date of Birth</th>
+                                <th>Gender</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in patients %}
+                            <tr>
+                                <td>{{ patient.name }}</td>
+                                <td>{{ patient.dob }}</td>
+                                <td>{{ patient.gender }}</td>
+                                <td>{{ patient.phone }}</td>
+                                <td>
+                                    <a href="{% url 'office:update_patient' patient.id %}" class="btn btn-warning btn-sm">Update</a>
+                                    <a href="{% url 'office:delete_patient' patient.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="{% url 'office:patient_medical_history' patient.id %}" class="btn btn-info btn-sm">Medical History</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <div class="footer text-center">
+        <p>&copy; 2024 Doctor Dashboard. All Rights Reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

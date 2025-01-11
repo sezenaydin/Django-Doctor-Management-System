@@ -1,0 +1,184 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Patient</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <style>
+        /* General Style */
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #002060;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            color: #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #f8f9fa;
+        }
+
+        .dashboard-header {
+            font-size: 2.5rem;
+            color: #343a40;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .dashboard-description {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            background-color: #0056b3;
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+
+        .footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .form-container {
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            width: 200px;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(90%);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            filter: brightness(90%);
+        }
+
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+       
+        p strong {
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            color: #343a40; 
+        }
+
+    </style>
+</head>
+
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="{% url 'office:home' %}">Doctor's Office Management System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+            </li>
+            <!-- Dashboard Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dashboard
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'office:secretary_dashboard' %}">Secretary</a>
+                    <a class="dropdown-item" href="{% url 'office:doctor_dashboard' %}">Doctor</a>
+                </div>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <form method="POST" action="{% url 'office:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link btn btn-link" style="color: white;">Logout</button>
+                </form>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+    <!-- Page Content -->
+    <div class="container mt-5">
+        <h1 class="dashboard-header">Delete Patient</h1>
+        <p class="dashboard-description">Are you sure you want to delete the patient?</p>
+
+        <div class="form-container">
+            <p><strong>Name:</strong> {{ patient.name }}</p>
+        
+
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Patient</button>
+            </form>
+
+            <a href="{% url 'office:view_patients' %}" class="btn btn-secondary mt-3">Cancel</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer text-center">
+        <p>&copy; 2024 Secretary Dashboard. All Rights Reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

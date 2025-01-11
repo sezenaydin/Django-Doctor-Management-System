@@ -1,0 +1,237 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Patients</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <style>
+        /* Genel Stil */
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #002060; 
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1.1rem;
+            color: #fff;
+            transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #00aaff;
+            transform: scale(1.1);
+        }
+
+        .dashboard-header {
+            font-size: 2.5rem;
+            color: #343a40;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .dashboard-description {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+
+        .footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .table {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 12px;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            width: 100px;
+            padding: 8px;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-primary {
+            background-color:rgb(9, 67, 129);
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover, .btn-warning:hover, .btn-danger:hover {
+            filter: brightness(90%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin-top: 50px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .back-btn {
+            margin-top: 30px;
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{% url 'office:home' %}">Doctor's Office Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                <!-- Dashboard Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dashboard
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'office:secretary_dashboard' %}">Secretary</a>
+                        <a class="dropdown-item" href="{% url 'office:doctor_dashboard' %}">Doctor</a>
+                    </div>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'office:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-link" style="color: white;">Logout</button>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mt-5">
+        <h1 class="dashboard-header">All Patients</h1>
+        <p class="dashboard-description">Here are the details of all registered patients. You can update or delete patient records.</p>
+
+        <!-- Patient List -->
+        <div class="table-responsive">
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Medications</th>
+                        <th>Medical History</th>
+                        <th>Emergency Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                        <tr>
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.dob }}</td>
+                            <td>{{ patient.gender }}</td>
+                            <td>{{ patient.phone }}</td>
+                            <td>{{ patient.email }}</td>
+                            <td>{{ patient.medications|default:"N/A" }}</td>
+                            <td>{{ patient.medical_history|default:"N/A" }}</td>
+                            <td>{{ patient.emergency_contact_name }} - {{ patient.emergency_contact_phone }}</td>
+                            <td>
+                                <a href="{% url 'office:update_patient' patient.id %}" class="btn btn-warning btn-sm">Update</a>
+                                <a href="{% url 'office:delete_patient' patient.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Back to Dashboard Link -->
+        <a href="{% url 'office:doctor_dashboard' %}" class="btn btn-primary mb-3 back-btn">Back to Doctor Dashboard</a>
+        <a href="{% url 'office:secretary_dashboard' %}" class="btn btn-primary mb-3 back-btn">Back to Secretary Dashboard</a>
+    </div>
+    {% if messages %}
+    <div class="container mt-4">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Footer -->
+    <div class="footer text-center">
+        <p>&copy; 2024 Secretary Dashboard. All Rights Reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+
+    <!-- Bootstrap JS (Optional for dynamic components) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
