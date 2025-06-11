@@ -51,6 +51,4 @@ This project is a web-based appointment management system built with Django. It 
 ## Usage
 - **Access the application: Navigate to http://127.0.0.1:8000.**
 
-- ** Doctor Login & Secretary Login**
-        - Email: doctoroffice@mail.com
-        - Password: doctoroffice2025
+
